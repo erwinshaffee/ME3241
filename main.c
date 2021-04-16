@@ -594,6 +594,7 @@ void game(void)
 		drawSprite(dir,0,x,y);  		// draw the doctor sprite based on it's x and y coordinate that is calculated in the handlr function
 		check_flags(); 					// check for the winning or losing flag that will take the programme out of this level one loop
 	}
+	//This section provides alternative endings based on final dressing outcome of santa
 	if(flag==win && santa == 1)
 	{
 		map_flag = game_win1;	
