@@ -21,10 +21,13 @@ void buttonSel(void) //Backspace
 }
 void buttonS(void)
 {
-	if( map_flag == menu)										// If the current loop is in the menu loop
+	if(map_flag == menu)										// If the current loop is in the menu loop
 	{
-		lvl = 2; 													// lvl = 2 which will trigger the right conditions to execute level two loop in the main code
+		lvl = 1; 													// lvl = 2 which will trigger the right conditions to execute level two loop in the main code
 	}
+	if(map_flag == game_win1 || map_flag == game_win2 || map_flag == game_win3 || map_flag == game_lose)
+	{
+		
 }
 void buttonR(void)
 {
