@@ -6,11 +6,13 @@
 //#include "time.h"
 
 
-int x, y, x2, y2, y3, yb4_jump, dt, v = 0;
+int x, y, x2, y2, y3, y_init, dt, lvl = 0, v = 0, N;
 int dir = 4;
-int timer;
-int activated1 = 0;
+int timer, activated1 = 0;
+int map_flag = 0, s_level = 1; 
+int flag = 0;
 #include "mygbalib.h"
+
 void clearSprites (void)
 {
 // The purpose of this fucntion is to clear all the sprites that is drawn previously, so that new sprites/ new level map can be drawn
@@ -30,6 +32,7 @@ void Handler(void)
 	     dt += 1;
          checkbutton();
          jump();
+         check_flags(); //Placeholder here as there needs to be an initial flag check
          x = x + x2;
          y = y + y2;
          x2 = 0; 
@@ -47,7 +50,7 @@ void jump(void)
     {
         y3 = v*dt - dt*dt;
         y3 = -y3/10;
-        y = yb4_jump + y3;
+        y = y_init + y3;
         if (dt > 25) 
         {
             dt = 0;
@@ -57,22 +60,52 @@ void jump(void)
     }
 
 }
-
 void init_pos(void) //To set the initial position of the sprite
 {
-	x = 120;
-	y = 80; //to input starting location
-    drawSprite(0,0,x,y); //Start with Santa facing right
-    
-	
+	clearSprites();
+    x = 0;
+	y = 144; //to input starting location
+    dir = A_R_NF; //Start with Santa facing right
 }
 
-void move(void){
+void check_flags()
+{
+    if(lvl == 1)
+    {
+        map_flag = s_level;
+    } 
+
+}
+/*void move(void){ //initial iteration to test movement
     clearSprites();
 
     while (activated1 == 0) {
     drawSprite(dir, 0, x, y);
    
+    }
+}*/
+
+void sample_map()
+{
+    N = 7;
+    clearSprites();
+    drawSprite(MIL_FAL,10,2,y);
+    x = 16;
+    y = 32;
+    drawSprite(7,11,x*4,y);
+    drawSprite(8,12,x*5,y);
+    //drawSprite(6,N++,x*6,y);
+
+    init_pos();
+}
+
+void sample_level() 
+{
+    sample_map();
+    while (flag==0)
+    {
+        drawSprite(dir,0,x,y);
+        check_flags();
     }
 }
 
@@ -102,7 +135,7 @@ int main(void)
     REG_TM0CNT =	TIMER_FREQUENCY_256 | TIMER_INTERRUPTS | TIMER_ENABLE;	// TODO: complete this line to set timer frequency and enable timer
     
     activated = 1;
-    while (activated == 1) { //as long as activated, look for the timer values and do accordingly
+    /*while (activated == 1) { //as long as activated, look for the timer values and do accordingly
 
     switch (timer)
     {
@@ -110,10 +143,16 @@ int main(void)
         init_pos();
         break;
     case 1:
-        
         move();
- 
     } 
+}*/ 
+while(map_flag<5)
+{
+    if (map_flag == s_level) 
+    {
+        sample_level();
+    }
+
 }
 
     while(1);
