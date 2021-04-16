@@ -7,7 +7,7 @@
 
 
 int x, y, x2, y2, y3, y_init, dt, lvl = 0, v = 0, N;
-int dir = 4;
+int dir = 4, santa = 0;
 int timer, activated1 = 0;
 int life_counter = 3;
 int map_flag = 0, menu = 0, game = 1, game_win1 = 2, game_win2 = 3, game_win3 = 4, game_lose = 5; 
@@ -240,7 +240,7 @@ void game_map(void)
 	pos_init();													// reset the initial position of the doctor after the map is drawn 
 }
 
-void gamewin_1(void)
+void gamewin_map1(void)
 {
 	// This function draws the map for the game over page 
 	N=7;														// because N is a gobal variable, it has to be re initialise everytime it is called is a new map function
@@ -321,7 +321,7 @@ void gamewin_1(void)
 	drawSprite( LETTER_E,N++,x+68,y);				//draws E at it's respective x and y coordinate
 }  
 
-void gamewin_2(void)
+void gamewin_map2(void)
 {
 	// This function draws the map for the game over page 
 	N=7;														// because N is a gobal variable, it has to be re initialise everytime it is called is a new map function
@@ -392,7 +392,7 @@ void gamewin_2(void)
 	drawSprite( LETTER_A,N++,x+62,y);				//draws E at it's respective x and y coordinate
 }
 
-void gamewin_3(void)
+void gamewin_map3(void)
 {
 	// This function draws the map for the game over page 
 	N=7;														// because N is a gobal variable, it has to be re initialise everytime it is called is a new map function
@@ -466,7 +466,7 @@ void gamewin_3(void)
 	drawSprite( LETTER_S,N++,x+74,y);				//draws E at it's respective x and y coordinate
 }  
 
-void gamelose(void)
+void gamelose_map(void)
 {
 	// This function draws the map for the game over page 
 	N=7;														// because N is a gobal variable, it has to be re initialise everytime it is called is a new map function
@@ -594,24 +594,31 @@ void game(void)
 		drawSprite(dir,0,x,y);  		// draw the doctor sprite based on it's x and y coordinate that is calculated in the handlr function
 		check_flags(); 					// check for the winning or losing flag that will take the programme out of this level one loop
 	}
-	if(flag==win)
+	if(flag==win && santa == 1)
 	{
-		map_flag = game_win;	// if the player wins, the map_flag will be changed to lvltwo which will fufill the condition in the main loop to execute the level two loop
-	//add the other win conditions
+		map_flag = game_win1;	
+	}
+	if(flag==win && santa == 2)
+	{
+		map_flag = game_win2;	
+	}
+	if(flag==win && santa == 3)
+	{
+		map_flag = game_win3;	
 	}
 	if(flag==lose)
 	{
-		map_flag = game_lose;					// if the player loses, the map_flag will be changed to gover which will fufill the condition in the main loop to execute the gameover loop
+		map_flag = game_lose;					
 	}
 	life_counter=3;						// since pill_counter is also a global variable that will store the last state of the number of pills, it have to be initialise to the starting value to prepare for other levels
-	flag = 0;								// After every level/map the flag have to be re-initialsed to zero so that the appropriate actions can take place at different map/level
+	flag = 0;						// After every level/map the flag have to be re-initialsed to zero so that the appropriate actions can take place at different map/level
 }
 
 void gameover(void)
 {
 	// This function consist of the loop and logic that runs the game over page
 	counter = 0;									// This line will ensure that the counter starts counting once the player entire this stage and not when the player loads the entire .gba file
-	gamelose();								// This line will load the gameover map
+	gamelose_map();								// This line will load the gameover map
 	while(flag!=win) {						// The page will be stuck at menu page until the flag has been raised to  win 
 		check_flags();						// The programme will be stuck in the loop until the flag has been changed to a win
 	}
@@ -619,11 +626,35 @@ void gameover(void)
 	flag = 0;								// After every level/map the flag have to be re-initialsed to zero so that the appropriate actions can take place at different map/level
 }
 
-void gamewin(void)
+void gamewin1(void)
 {
 	// This function consist of the loop and logic that runs the winning page
 	counter = 0;									// This line will ensure that the counter starts counting once the player entire this stage and not when the player loads the entire .gba file
-	gamewin_map();									// This line will load the gamewin map
+	gamewin_map1();									// This line will load the gamewin map
+	while(flag!=win) {						// The page will be stuck at menu page until the flag has been raised to  win 
+		check_flags();						// The programme will be stuck in the loop until the flag has been changed to a win
+	}
+	lvl = 0;  								// The lvl variable has to be intialised to 0 so that the next time the player enters the menu page, the player can choose which level to play and not stick to what was chosen priviously
+	flag = 0;
+}
+
+void gamewin2(void)
+{
+	// This function consist of the loop and logic that runs the winning page
+	counter = 0;									// This line will ensure that the counter starts counting once the player entire this stage and not when the player loads the entire .gba file
+	gamewin_map2();									// This line will load the gamewin map
+	while(flag!=win) {						// The page will be stuck at menu page until the flag has been raised to  win 
+		check_flags();						// The programme will be stuck in the loop until the flag has been changed to a win
+	}
+	lvl = 0;  								// The lvl variable has to be intialised to 0 so that the next time the player enters the menu page, the player can choose which level to play and not stick to what was chosen priviously
+	flag = 0;
+}
+
+void gamewin3(void)
+{
+	// This function consist of the loop and logic that runs the winning page
+	counter = 0;									// This line will ensure that the counter starts counting once the player entire this stage and not when the player loads the entire .gba file
+	gamewin_map3();									// This line will load the gamewin map
 	while(flag!=win) {						// The page will be stuck at menu page until the flag has been raised to  win 
 		check_flags();						// The programme will be stuck in the loop until the flag has been changed to a win
 	}
@@ -646,12 +677,12 @@ int main(void)
 
     // Set Handler Function for interrupts and enable selected interrupts
     REG_INT = (int)&Handler;
-    REG_IE = INT_TIMER0;				// TODO: complete this line to choose which timer interrupts to enable
+    REG_IE |= INT_TIMER0;				// TODO: complete this line to choose which timer interrupts to enable
     REG_IME = 0x1;		// Enable interrupt handling
 
     // Set Timer Mode (fill that section and replace TMX with selected timer number)
     REG_TM0D =	63350;		// TODO: complete this line to set timer initial value
-    REG_TM0CNT =	TIMER_FREQUENCY_256 | TIMER_INTERRUPTS | TIMER_ENABLE;	// TODO: complete this line to set timer frequency and enable timer
+    REG_TM0CNT |=	TIMER_FREQUENCY_256 | TIMER_INTERRUPTS | TIMER_ENABLE;	// TODO: complete this line to set timer frequency and enable timer
     
     activated = 1;
     /*while (activated == 1) { //as long as activated, look for the timer values and do accordingly
@@ -665,12 +696,26 @@ int main(void)
         move();
     } 
 }*/ 
-while(map_flag<5)
+while(map_flag<6)
 {
-    if (map_flag == s_level) 
-    {
-        sample_level();
-    }
+	if(map_flag==start) {
+		menu();							// if map_flag == start, the menu loop will be executed
+	}
+	if(map_flag==game) {
+		game();					// if map_flag == lvlone, the level one loop will be executed
+	}
+	if(map_flag==game_win1) {
+		gamewin1();					// if map_flag == gameover, the game over loop will be executed
+	}
+	if(map_flag==game_win1) {
+		gamewin2();					// if map_flag == gameover, the game over loop will be executed
+	}
+	if(map_flag==game_win1) {
+		gamewin3();					// if map_flag == gameover, the game over loop will be executed
+	}
+	if(map_flag==game_lose) {
+		gamelose();						// if map_flag == gamewin, the game win loop will be executed
+	}
 
 }
 
