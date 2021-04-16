@@ -9,8 +9,8 @@
 int x, y, x2, y2, y3, y_init, dt, lvl = 0, v = 0, N;
 int dir = 4;
 int timer, activated1 = 0;
-int map_flag = 0, s_level = 1; 
-int flag = 0;
+int map_flag = 0, menu = 0, game = 1, game_win = 2, game_lose = 3; 
+int flag = 0, win = 4, lose = 5;
 #include "mygbalib.h"
 
 void clearSprites (void)
@@ -67,15 +67,40 @@ void init_pos(void) //To set the initial position of the sprite
 	y = 144; //to input starting location
     dir = A_R_NF; //Start with Santa facing right
 }
-
-void check_flags()
+void check_flags(void)
 {
-    if(lvl == 1)
-    {
-        map_flag = s_level;
-    } 
+	int dx=16;	 // This local variable is created as it is only called in this function and nowhere else 
 
+	// This checks for the win condition, which is to reach the position x = 192 and y = 10 (chimney sprite)
+	if ( (x == 192) & (y == 10)) {
+		flag = win;	// When the condition is met, the flag variable will store the value of win, which is 4
+	}
+	// This flag checks for which button is pressed in the menu page
+	if(map_flag == start) {
+		if(lvl==1) // if button A is pressed the map_flag will change to lvlone, which will load the fucntion that codes for level one
+		{
+			map_flag = game; 	// The map flag will change to lvlone, which will prompt the code load level one map in the main code 
+			flag = win;		// When the condition is met, the flag variable will store the value of win, this is need to exit the level loop
+		} 
+	}
+	// This flag checks if the enemy comes into contact with Santa 
+	if ((enemy1_y == y )|(enemy2_y ==y)) {					// This condition is use to check the y co-ordinate of the two viruses and the doctor																	// If the viruses and the doctor is on the same level/y-coordinate, the following if statements will check if the doctor and virus will come into contact
+		if( x > enemy_x) {											// This if statement tracks case 1 of the interaction between the virus and the doctor: which is when the doctor is on the right of the virus									
+			dx = x - enemy_x;										// in this case the difference between them is then the x-cordinate of the doctor minus the x coordinate of the virus
+		}
+		if( enemy_x > x) {											// This if statement tracks case 2 of the interaction between the virus and the doctor: which is when the doctor is on the left of the virus
+			dx = enemy_x - x;										// in this case the difference between them is then the x-cordinate of the virus minus the x coordinate of the doctor
+		}  
+		if( dx < 16) { 												// if the difference in x coordinate between the doctor and the virus is less than 16, it means the two sprite have come into contact
+			life_counter--;				// this would mean that the doctor have died and hence lost one life/pill, pill_counter tracks the number of live the doctor has left 
+			pos_init();						// because the doctor have lost a live, he would have to start from the beginng in the initial position stated in the pos_init function
+			if(life_counter == 0) {		// when the pill_counter is down to 0 the charcater has no more lives left and it is game over for the player 
+				flag = lose;				// hence the the flag variable will store the value of lose, which is just the integer 6 
+			}
+		}
+	}
 }
+
 /*void move(void){ //initial iteration to test movement
     clearSprites();
 
@@ -85,19 +110,353 @@ void check_flags()
     }
 }*/
 
-void sample_map()
+void menu_map (void)
 {
-    N = 7;
-    clearSprites();
-    drawSprite(MIL_FAL,10,2,y);
-    x = 16;
-    y = 32;
-    drawSprite(7,11,x*4,y);
-    drawSprite(8,12,x*5,y);
-    //drawSprite(6,N++,x*6,y);
+	// This function draws the map for the menu page 
+	N = 7;								    	  	// because N is a gobal variable, it has to be re initialise everytime it is called is a new map function
+	clearSprites();						   	// all the sprites that was drawn in previous level will be cleared using this function
+	// THIS SECTION DRAWS "THE NIGHT BEFORE XMAS" //	
+	y = 22;														//draws the following sprites the y coordinate, y = 32
+	x = 100;														//draws the following sprites starting at the x coordinate, x = 50
+	drawSprite( LETTER_S,N,x,y);	        				// some random line to get the code working, without this line the next drawSprite will not be drawn
+	drawSprite( LETTER_TW,N++,x,y);						//draws H at it's respective x and y coordinate
+	drawSprite( LETTER_HW,N++,x+10,y);						//draws E at it's respective x and y coordinate	
+	drawSprite( LETTER_EW,N++,x+18,y);					//draws A at it's respective x and y coordinate
 
-    init_pos();
+	y=36;
+	x=92;
+	drawSprite( LETTER_N,N++,x,y);					//draws L at it's respective x and y coordinate
+	drawSprite( LETTER_I,N++,x+8,y);					//draws T at it's respective x and y coordinate
+	drawSprite( LETTER_G,N++,x+15,y);					//draws A at it's respective x and y coordinate
+	drawSprite( LETTER_HW,N++,x+26,y);					//draws L at it's respective x and y coordinate
+	drawSprite( LETTER_TW,N++,x+36,y);					//draws T at it's respective x and y coordinate
+	
+	y = 50;
+	x = 86;
+	drawSprite( LETTER_B,N++,x,y);					//draws H at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+8,y); 					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_F,N++,x+18,y);					//draws W at it's respective x and y coordinate
+	drawSprite( LETTER_O,N++,x+28,y);					//draws O at it's respective x and y coordinate
+	drawSprite( LETTER_RW,N++,x+37,y);					//draws R at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+47,y);					//draws L at it's respective x and y coordinate
+	
+	y=68;
+	x=92;
+	drawSprite( DR_RIGHT,N++,x-20,y);					//draws T at it's respective x and y coordinate
+	drawSprite( LETTER_X,N++,x,y);					//draws D at it's respective x and y coordinate
+	drawSprite( LETTER_MW,N++,x+12,y);
+	drawSprite( LETTER_A,N++,x+25,y);
+	drawSprite( LETTER_S,N++,x+36,y);
+	drawSprite( DR_LEFT,N++,x+58,y-4);					//draws T at it's respective x and y coordinate
+	
+	// THIS SECTION ADDS SOME DESIGN//	
+	y = 119;
+	x = 0;
+	drawSprite( PLATFORM_M,N++,x,y);					//draws H at it's respective x and y coordinate
+	drawSprite( PLATFORM_M,N++,x+16,y);
+	drawSprite( PLATFORM_M,N++,x+32,y);
+	drawSprite( PLATFORM_M,N++,x+48,y);
+	drawSprite( PLATFORM_M,N++,x+64,y);	        				// some random line to get the code working, without this line the next drawSprite will not be drawn
+	drawSprite( PLATFORM_M,N++,x+80,y);
+	drawSprite( PLATFORM_M,N++,x+96,y);
+	drawSprite( PLATFORM_M,N++,x+112,y);
+	drawSprite( PLATFORM_M,N++,x+128,y);
+	drawSprite( PLATFORM_M,N++,x+144,y);
+	drawSprite( PLATFORM_M,N++,x+160,y);
+	drawSprite( PLATFORM_M,N++,x+176,y);
+	drawSprite( PLATFORM_M,N++,x+192,y);
+	drawSprite( PLATFORM_M,N++,x+208,y);
+	drawSprite( PLATFORM_M,N++,x+224,y);
+
+	// THIS SECTION DRAWS "PRESS START" //
+	y = 120;														//draws the following sprites the y coordinate, y = 96
+	x = 68;														//draws the following sprites starting at the x coordinate, x = 44
+	drawSprite( LETTER_PW,N++,x,y);					//draws P at it's respective x and y coordinate
+	drawSprite( LETTER_RW,N++,x+8,y);					//draws R at it's respective x and y coordinate
+	drawSprite( LETTER_EW,N++,x+17,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_SW,N++,x+25,y);					//draws S at it's respective x and y coordinate
+	drawSprite( LETTER_SW,N++,x+33,y);					//draws S at it's respective x and y coordinate
+	drawSprite( LETTER_SW,N++,x+53,y);					//draws A at it's respective x and y coordinate
+	drawSprite( LETTER_TW,N++,x+61,y);					//draws A at it's respective x and y coordinate
+	drawSprite( LETTER_AW,N++,x+69,y);					//draws A at it's respective x and y coordinate
+	drawSprite( LETTER_RW,N++,x+77,y);					//draws A at it's respective x and y coordinate
+	drawSprite( LETTER_TW,N++,x+85,y);					//draws A at it's respective x and y coordinate
 }
+
+void game_map(void)
+{
+	// This function draws the necessary sprites for the game map 
+	N=7;													  	// because N is a gobal variable, it has to be re initialise everytime it is called is a new map function
+	clearSprites();                      			// clear all the sprites that is drawn previously 
+	drawSprite(CHIMNEY,N,2,y);              	 	// some random line to get the code working
+	// THIS SECTION DRAWS THE CHIMNEY IN FINAL POSITION //
+	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	y = 10;													//draws the following sprites the y coordinate, y = 16
+	drawSprite(CHIMNEY,N++,x*12,y);					//draws vaccine sprite at it's respective x and y coordinate
+	// THIS SECTION DRAWS THE PLATFORMS AND GIFTS //
+	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	y = 30;													//draws the following sprites the y coordinate, y = 32
+	drawSprite(PLATFORM8_L,N++,x*8,y);				//draws PLATFORM_M with ladder sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM8_L,N++,x*9,y);
+	drawSprite(PLATFORM8_L,N++,x*10,y);
+	drawSprite(PLATFORM8_R,N++,x*11,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM8_R,N++,x*12,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	y = 28;													//draws the following sprites the y coordinate, y = 48
+	drawSprite(PREZ,N++,x*3,y);						//draws ladder sprite at it's respective x and y coordinate
+	drawSprite(PREZ,N++,x*6,y);					//draws ladder sprite at it's respective x and y coordinate
+	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	y = 64;													//draws the following sprites the y coordinate, y = 48
+	drawSprite(PLATFORM8_L,N++,x*1,y);						//draws ladder sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM8_L,N++,x*2,y);
+	drawSprite(PLATFORM8_L,N++,x*3,y);
+	drawSprite(PLATFORM8_L,N++,x*4,y);
+	drawSprite(PLATFORM8_L,N++,x*5,y);		
+	drawSprite(PLATFORM8_R,N++,x*6,y);					//draws ladder sprite at it's respective x and y coordinate
+	x = 16;													//draws the following sprites starting at the x coordinate, x = 16
+	y = 70;													//draws the following sprites the y coordinate, y = 96
+	drawSprite(PREZ,N++,x*8,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PREZ,N++,x*11,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	y = 110;													//draws the following sprites the y coordinate, y = 96
+	drawSprite(PLATFORM8_L,N++,x*8,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM8_L,N++,x*9,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM8_R,N++,x*10,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM8_R,N++,x*11,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM8_R,N++,x*12,y);
+	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	y = 120;													//draws the following sprites the y coordinate, y = 128
+	drawSprite(PREZ,N++,x*2,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PREZ,N++,x*6,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+
+	pos_init();													// reset the initial position of the doctor after the map is drawn 
+}
+
+void gamewin_1(void)
+{
+	// This function draws the map for the game over page 
+	N=7;														// because N is a gobal variable, it has to be re initialise everytime it is called is a new map function
+	clearSprites();             				      // clear all the sprites that is drawn previously 
+	drawSprite(PREZ,N,2,y); 					   // some random line to get the code working
+
+	// THIS SECTION DRAWS "LEVEL COMPLETE" //	
+	y = 22;													//draws the following sprites at the y coordinate, y = 48
+	x = 60;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	drawSprite( PREZ,N++,x-13,y-4);
+	drawSprite( LETTER_L,N++,x,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+8,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_V,N++,x+16,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+24,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_L,N++,x+32,y);													//draws the following sprites at the y coordinate, y = 64
+													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	drawSprite( LETTER_C,N++,x+52,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_O,N++,x+60,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_MW,N++,x+68,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_P,N++,x+76,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_L,N++,x+84,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+92,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_T,N++,x+100,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+108,y);				//draws E at it's respective x and y coordinate
+	drawSprite( PREZ,N++,x+128,y-4);
+	
+	y = 21;
+	x = 0;
+	drawSprite( PLATFORM_M,N++,x,y);					//draws H at it's respective x and y coordinate
+	drawSprite( PLATFORM_M,N++,x+16,y);
+	drawSprite( PLATFORM_M,N++,x+32,y);
+	drawSprite( PLATFORM_M,N++,x+48,y);
+	drawSprite( PLATFORM_M,N++,x+64,y);	        				// some random line to get the code working, without this line the next drawSprite will not be drawn
+	drawSprite( PLATFORM_M,N++,x+80,y);
+	drawSprite( PLATFORM_M,N++,x+96,y);
+	drawSprite( PLATFORM_M,N++,x+112,y);
+	drawSprite( PLATFORM_M,N++,x+128,y);
+	drawSprite( PLATFORM_M,N++,x+144,y);
+	drawSprite( PLATFORM_M,N++,x+160,y);
+	drawSprite( PLATFORM_M,N++,x+176,y);
+	drawSprite( PLATFORM_M,N++,x+192,y);
+	drawSprite( PLATFORM_M,N++,x+208,y);
+	drawSprite( PLATFORM_M,N++,x+224,y);
+
+	// THIS SECTION DRAWS "SOMEONE CALL THE POLICE" //	
+	y=85;
+	x=70;
+	drawSprite( DR_RIGHT,N++,x-30,y); //DOOR
+	drawSprite( DR_RIGHT,N++,x,y);	//UNDRESSED SANTA
+	drawSprite( DR_RIGHT,N++,x+100,y);	//SANTA WIFE
+
+	y = 110;													//draws the following sprites at the y coordinate, y = 96
+	x = 120;												   //draws the following sprites the x coordinate,starting from  x = 112
+	drawSprite( LETTER_SW,N++,x,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_O,N++,x+8,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_MW,N++,x+16,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+24,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_O,N++,x+34,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_N,N++,x+42,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+50,y);				//draws E at it's respective x and y coordinate
+	
+	drawSprite( LETTER_C,N++,x+64,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_AW,N++,x+72,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_L,N++,x+80,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_L,N++,x+88,y);				//draws E at it's respective x and y coordinate
+	
+	y = 122;													//draws the following sprites at the y coordinate, y = 96
+	x = 130;
+	drawSprite( LETTER_T,N++,x-2,y);				//draws E at it's respective x and y coordinate		
+	drawSprite( LETTER_H,N++,x+8,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+16,y);				//draws E at it's respective x and y coordinate
+	
+	drawSprite( LETTER_P,N++,x+30,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_O,N++,x+38,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_L,N++,x+44,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_I,N++,x+52,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_C,N++,x+60,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+68,y);				//draws E at it's respective x and y coordinate
+}  
+
+void gamewin_2(void)
+{
+	// This function draws the map for the game over page 
+	N=7;														// because N is a gobal variable, it has to be re initialise everytime it is called is a new map function
+	clearSprites();             				      // clear all the sprites that is drawn previously 
+	drawSprite(PREZ,N,2,y); 					   // some random line to get the code working
+	//THIS SECTION DRAWS THE "LEVEL COMPLETE" //	
+	y = 22;													//draws the following sprites at the y coordinate, y = 48
+	x = 60;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	drawSprite( PREZ,N++,x-13,y-4);
+	drawSprite( LETTER_L,N++,x,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+8,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_V,N++,x+16,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+24,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_L,N++,x+32,y);													//draws the following sprites at the y coordinate, y = 64
+													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	drawSprite( LETTER_C,N++,x+52,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_O,N++,x+60,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_MW,N++,x+68,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_P,N++,x+76,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_L,N++,x+84,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+92,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_T,N++,x+100,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+108,y);				//draws E at it's respective x and y coordinate
+	drawSprite( PREZ,N++,x+128,y-4);
+	
+	y = 21;
+	x = 0;
+	drawSprite( PLATFORM_M,N++,x,y);					//draws H at it's respective x and y coordinate
+	drawSprite( PLATFORM_M,N++,x+16,y);
+	drawSprite( PLATFORM_M,N++,x+32,y);
+	drawSprite( PLATFORM_M,N++,x+48,y);
+	drawSprite( PLATFORM_M,N++,x+64,y);	        				// some random line to get the code working, without this line the next drawSprite will not be drawn
+	drawSprite( PLATFORM_M,N++,x+80,y);
+	drawSprite( PLATFORM_M,N++,x+96,y);
+	drawSprite( PLATFORM_M,N++,x+112,y);
+	drawSprite( PLATFORM_M,N++,x+128,y);
+	drawSprite( PLATFORM_M,N++,x+144,y);
+	drawSprite( PLATFORM_M,N++,x+160,y);
+	drawSprite( PLATFORM_M,N++,x+176,y);
+	drawSprite( PLATFORM_M,N++,x+192,y);
+	drawSprite( PLATFORM_M,N++,x+208,y);
+	drawSprite( PLATFORM_M,N++,x+224,y);
+	// THIS SECTION DRAWS "YOU ARE NOT SANTA" //	
+	y=85;
+	x=70;
+	drawSprite( CHIMNEY,N++,x-30,y); //DOOR
+	drawSprite( DR_RIGHT,N++,x,y);	//UNDRESSED SANTA
+	drawSprite( DR_RIGHT,N++,x+100,y);	//SANTA WIFE
+
+	y = 110;													//draws the following sprites at the y coordinate, y = 96
+	x = 146;												   //draws the following sprites the x coordinate,starting from  x = 112
+	drawSprite( LETTER_Y,N++,x,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_O,N++,x+8,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_U,N++,x+16,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_AW,N++,x+30,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_RW,N++,x+38,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+46,y);					//draws E at it's respective x and y coordinate
+	
+	y = 122;													//draws the following sprites at the y coordinate, y = 96
+	x = 140;
+	drawSprite( LETTER_N,N++,x-2,y);				//draws E at it's respective x and y coordinate		
+	drawSprite( LETTER_O,N++,x+8,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_T,N++,x+16,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_SW,N++,x+30,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_AW,N++,x+38,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_N,N++,x+46,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_T,N++,x+54,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_AW,N++,x+62,y);				//draws E at it's respective x and y coordinate
+}
+
+void gamewin_3(void)
+{
+	// This function draws the map for the game over page 
+	N=7;														// because N is a gobal variable, it has to be re initialise everytime it is called is a new map function
+	clearSprites();             				      // clear all the sprites that is drawn previously 
+	drawSprite(PREZ,N,2,y); 					   // some random line to get the code working
+	// THIS SECTION DRAWS "LEVEL COMPLETE" //
+	y = 22;													//draws the following sprites at the y coordinate, y = 48
+	x = 60;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	drawSprite( PREZ,N++,x-13,y-4);
+	drawSprite( LETTER_L,N++,x,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+8,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_V,N++,x+16,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+24,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_L,N++,x+32,y);												//draws the following sprites at the y coordinate, y = 64
+													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
+	drawSprite( LETTER_C,N++,x+52,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_O,N++,x+60,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_MW,N++,x+68,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_P,N++,x+76,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_L,N++,x+84,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+92,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_T,N++,x+100,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+108,y);				//draws E at it's respective x and y coordinate
+	drawSprite( PREZ,N++,x+128,y-4);
+	
+	y = 21;
+	x = 0;
+	drawSprite( PLATFORM_M,N++,x,y);					//draws H at it's respective x and y coordinate
+	drawSprite( PLATFORM_M,N++,x+16,y);
+	drawSprite( PLATFORM_M,N++,x+32,y);
+	drawSprite( PLATFORM_M,N++,x+48,y);
+	drawSprite( PLATFORM_M,N++,x+64,y);	        				// some random line to get the code working, without this line the next drawSprite will not be drawn
+	drawSprite( PLATFORM_M,N++,x+80,y);
+	drawSprite( PLATFORM_M,N++,x+96,y);
+	drawSprite( PLATFORM_M,N++,x+112,y);
+	drawSprite( PLATFORM_M,N++,x+128,y);
+	drawSprite( PLATFORM_M,N++,x+144,y);
+	drawSprite( PLATFORM_M,N++,x+160,y);
+	drawSprite( PLATFORM_M,N++,x+176,y);
+	drawSprite( PLATFORM_M,N++,x+192,y);
+	drawSprite( PLATFORM_M,N++,x+208,y);
+	drawSprite( PLATFORM_M,N++,x+224,y);
+	// THIS SECTION DRAWS "HO HO HO MERRY XMAS" //	
+	y=85;
+	x=70;
+	drawSprite( DR_RIGHT,N++,x-30,y); //DOOR
+	drawSprite( DR_RIGHT,N++,x,y);	//UNDRESSED SANTA
+	drawSprite( DR_LEFT,N++,x+20,y);
+	drawSprite( DR_RIGHT,N++,x+100,y);	//SANTA WIFE
+
+	y = 110;													//draws the following sprites at the y coordinate, y = 96
+	x = 50;												   //draws the following sprites the x coordinate,starting from  x = 112
+	
+	drawSprite( LETTER_H,N++,x,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_O,N++,x+8,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_H,N++,x+20,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_O,N++,x+28,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_H,N++,x+40,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_O,N++,x+48,y);					//draws E at it's respective x and y coordinate
+	
+	y = 122;													//draws the following sprites at the y coordinate, y = 96
+	x = 50;
+	drawSprite( LETTER_MW,N++,x,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_E,N++,x+8,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_RW,N++,x+16,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_RW,N++,x+24,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_Y,N++,x+32,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_XW,N++,x+48,y);					//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_MW,N++,x+56,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_AW,N++,x+66,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_SW,N++,x+74,y);				//draws E at it's respective x and y coordinate
+}  
 
 void sample_level() 
 {
