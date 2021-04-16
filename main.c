@@ -9,8 +9,9 @@
 int x, y, x2, y2, y3, y_init, dt, lvl = 0, v = 0, N;
 int dir = 4;
 int timer, activated1 = 0;
-int map_flag = 0, menu = 0, game = 1, game_win = 2, game_lose = 3; 
-int flag = 0, win = 4, lose = 5;
+int life_counter = 3;
+int map_flag = 0, menu = 0, game = 1, game_win1 = 2, game_win2 = 3, game_win3 = 4, game_lose = 5; 
+int flag = 0, win = 6, lose = 7;
 #include "mygbalib.h"
 
 void clearSprites (void)
@@ -76,10 +77,17 @@ void check_flags(void)
 		flag = win;	// When the condition is met, the flag variable will store the value of win, which is 4
 	}
 	// This flag checks for which button is pressed in the menu page
-	if(map_flag == start) {
+	if(map_flag == menu) {
 		if(lvl==1) // if button A is pressed the map_flag will change to lvlone, which will load the fucntion that codes for level one
 		{
 			map_flag = game; 	// The map flag will change to lvlone, which will prompt the code load level one map in the main code 
+			flag = win;		// When the condition is met, the flag variable will store the value of win, this is need to exit the level loop
+		} 
+	}
+	if(map_flag == game_lose || map_flag == game_win1 || map_flag == game_win2 || map_flag == game_win3) {
+		if(lvl==1) // if button A is pressed the map_flag will change to lvlone, which will load the fucntion that codes for level one
+		{
+			map_flag = menu; 	// The map flag will change to lvlone, which will prompt the code load level one map in the main code 
 			flag = win;		// When the condition is met, the flag variable will store the value of win, this is need to exit the level loop
 		} 
 	}
@@ -539,18 +547,89 @@ void gamelose(void)
 	drawSprite( LETTER_N,N++,x+62,y);				//draws E at it's respective x and y coordinate
 }  
 
-void sample_level() 
+void draw_lives(void)
 {
-    sample_map();
-    while (flag==0)
-    {
-        drawSprite(dir,0,x,y);
-        check_flags();
-    }
+
+// This fucntion will draw the correct number of lives that the character has left 
+
+	if(life_counter == 3)
+	{
+		drawSprite(LIFE,1,0,5);     // Pill no. 1 is drawn at the top left hand corner of the screen
+		drawSprite(LIFE,2,20,5);	  // Pill no. 2 id drawn on the right of pill no. 1
+		drawSprite(LIFE,3,40,5);	  // and pill no. 3 is drawn on the right of pill no. 2
+	}
+	if(life_counter == 2)
+	{
+		drawSprite(LIFE,1,0,5);		// Pill no. 1 is drawn at the top left hand corner of the screen
+		drawSprite(LIFE,2,20,5);		// Pill no. 2 id drawn on the right of pill no. 1
+		drawSprite(LIFE,3,240,160);	// and pill no. 3 is drawn outside of the frame to emulate 2 lives left 
+	}
+	if(life_counter == 1)
+	{
+		drawSprite(LIFE,1,0,5);		// Pill no. 1 is drawn at the top left hand corner of the screen
+		drawSprite(LIFE,2,240,160);	// Pill no. 2 is drawn outside of the frame 
+		drawSprite(LIFE,3,240,160);	// and pill no. 3 is also drawn outside of the frame to emulate 1 lives left
+	}
 }
 
+void menu(void)
+{
+	// This function consist of the loop and logic that runs the menu page 
+	menu_map();								// The menu map will be drawn when the program first enters this function
+	while(flag!=win) {						// The page will be stuck at menu page until the flag has been raised to  win 
+		check_flags();						// The programme will be stuck in the loop until the flag has been changed to a win
+	}
+	lvl = 0;  								// The lvl variable has to be intialised to 0 so that the next time the player enters the menu page, the player can choose which level to play and not stick to what was chosen priviously
+	flag = 0;								// After every level/map the flag have to be re-initialsed to zero so that the appropriate actions can take place at different map/level
+}
 
+void game(void)
+{
+	// This function consist of the loop and logic that runs the level one page
+	counter = 0;							// This line will ensure that the counter starts counting once the player entire this stage and not when the player loads the entire .gba file
+	game_map();						// This will load the level one map
+	while(flag==0)							//	This is the start of the level one loop 
+	{ 	 										// in this loop the programme will
+		draw_lives();						// draw the relevant number of pills based on the pill_counter
+		drawSprite(dir,0,x,y);  		// draw the doctor sprite based on it's x and y coordinate that is calculated in the handlr function
+		check_flags(); 					// check for the winning or losing flag that will take the programme out of this level one loop
+	}
+	if(flag==win)
+	{
+		map_flag = game_win;	// if the player wins, the map_flag will be changed to lvltwo which will fufill the condition in the main loop to execute the level two loop
+	//add the other win conditions
+	}
+	if(flag==lose)
+	{
+		map_flag = game_lose;					// if the player loses, the map_flag will be changed to gover which will fufill the condition in the main loop to execute the gameover loop
+	}
+	life_counter=3;						// since pill_counter is also a global variable that will store the last state of the number of pills, it have to be initialise to the starting value to prepare for other levels
+	flag = 0;								// After every level/map the flag have to be re-initialsed to zero so that the appropriate actions can take place at different map/level
+}
 
+void gameover(void)
+{
+	// This function consist of the loop and logic that runs the game over page
+	counter = 0;									// This line will ensure that the counter starts counting once the player entire this stage and not when the player loads the entire .gba file
+	gamelose();								// This line will load the gameover map
+	while(flag!=win) {						// The page will be stuck at menu page until the flag has been raised to  win 
+		check_flags();						// The programme will be stuck in the loop until the flag has been changed to a win
+	}
+	lvl = 0;  								// The lvl variable has to be intialised to 0 so that the next time the player enters the menu page, the player can choose which level to play and not stick to what was chosen priviously
+	flag = 0;								// After every level/map the flag have to be re-initialsed to zero so that the appropriate actions can take place at different map/level
+}
+
+void gamewin(void)
+{
+	// This function consist of the loop and logic that runs the winning page
+	counter = 0;									// This line will ensure that the counter starts counting once the player entire this stage and not when the player loads the entire .gba file
+	gamewin_map();									// This line will load the gamewin map
+	while(flag!=win) {						// The page will be stuck at menu page until the flag has been raised to  win 
+		check_flags();						// The programme will be stuck in the loop until the flag has been changed to a win
+	}
+	lvl = 0;  								// The lvl variable has to be intialised to 0 so that the next time the player enters the menu page, the player can choose which level to play and not stick to what was chosen priviously
+	flag = 0;
+}
 
 // -----------------------------------------------------------------------------
 // Project Entry Point
