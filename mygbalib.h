@@ -6,14 +6,14 @@ void buttonA(void) //Z
 {
 	if(v==0)
     {
-        yb4_jump = y; //locks initial y position before the jump
+        y_init = y; //locks initial y position before the jump
         dt = 0; //reinitialize timer to ensure start from zero
         v = 26; //inputs initial starting velocity
     }//jump function here;
 }
 void buttonB(void) //X
 {
-	timer = 1;
+	lvl = 1; //Press X to load sample level
 }
 void buttonSel(void) //Backspace
 {
