@@ -19,10 +19,13 @@ void buttonSel(void) //Backspace
 {
 	timer = 0;
 }
-/*void buttonS(void)
+void buttonS(void)
 {
-	x = x;
-}*/
+	if( map_flag == menu)										// If the current loop is in the menu loop
+	{
+		lvl = 2; 													// lvl = 2 which will trigger the right conditions to execute level two loop in the main code
+	}
+}
 void buttonR(void)
 {
     if (x > 224) {
@@ -75,11 +78,11 @@ void checkbutton(void)
     /*if ((buttons & KEY_SELECT) == KEY_SELECT)
     {
         buttonSel();
-    }
+    }*/
     if ((buttons & KEY_START) == KEY_START)
     {
         buttonS();
-    }*/
+    }
     if ((buttons & KEY_RIGHT) == KEY_RIGHT)
     {
         buttonR();
