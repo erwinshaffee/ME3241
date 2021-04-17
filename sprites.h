@@ -66,7 +66,7 @@ u16 sprites[] = {
 8,8,8,0,0,0,0,0,
 8,8,8,8,0,0,0,0,
 
-#define Mr_S_N_L 1 // Mr Santa | Naked | Looking Left
+#define MR_S_N_L 1 // Mr Santa | Naked | Looking Left
 // Tile 00
 0,0,0,0,12,12,12,12,
 0,0,0,12,12,12,12,12,
@@ -104,7 +104,7 @@ u16 sprites[] = {
 8,8,8,0,0,0,0,0,
 8,8,8,8,0,0,0,0,
 
-#define MR_S_B_R 2 // Mr Santa w Beard Looking Right
+/*#define MR_S_B_R 2 // Mr Santa w Beard Looking Right
 // Tile 00
 0,0,0,11,12,12,12,12,
 0,0,11,12,12,12,12,12,
@@ -344,7 +344,7 @@ u16 sprites[] = {
 6,6,11,11,0,0,0,0,
 6,6,0,0,0,0,0,0,
 8,8,8,0,0,0,0,0,
-8,8,8,8,0,0,0,0,
+8,8,8,8,0,0,0,0,*/
 
 #define MR_S_E_R 8 // Mr Santa with Everything on facing Right
 
@@ -388,7 +388,7 @@ u16 sprites[] = {
 8,8,8,0,0,0,0,0,
 8,8,8,8,0,0,0,0,
 
-#define MR_S_E_L 9 // Mr Santa with Everything on facing Left
+/*#define MR_S_E_L 9 // Mr Santa with Everything on facing Left
 
 // Tile 00
 0,0,0,0,6,6,6,6,
@@ -1186,7 +1186,7 @@ u16 sprites[] = {
 0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0, */
 
 #define PREZ 28 // Santa's Present where the clothes will pop up from
 
@@ -1230,7 +1230,7 @@ u16 sprites[] = {
 0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,
 
-#define KID_R 29 // Santa's Enemy facing Right
+/*#define KID_R 29 // Santa's Enemy facing Right
 
 // Tile 00
 0,0,0,0,0,0,0,0,
@@ -1312,7 +1312,7 @@ u16 sprites[] = {
 0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,*/
   
 #define MS_S_L 31 // Santa's Wife facing Left
 
