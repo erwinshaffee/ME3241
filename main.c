@@ -204,34 +204,34 @@ void game_map(void)
 	// THIS SECTION DRAWS THE PLATFORMS AND GIFTS //
 	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
 	y = 30;													//draws the following sprites the y coordinate, y = 32
-	drawSprite(PLATFORM8_L,N++,x*8,y);				//draws PLATFORM_M with ladder sprite at it's respective x and y coordinate
-	drawSprite(PLATFORM8_L,N++,x*9,y);
-	drawSprite(PLATFORM8_L,N++,x*10,y);
-	drawSprite(PLATFORM8_R,N++,x*11,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
-	drawSprite(PLATFORM8_R,N++,x*12,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM,N++,x*8,y);				//draws PLATFORM_M with ladder sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM,N++,x*9,y);
+	drawSprite(PLATFORM,N++,x*10,y);
+	drawSprite(PLATFORM,N++,x*11,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM,N++,x*12,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
 	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
 	y = 28;													//draws the following sprites the y coordinate, y = 48
 	drawSprite(PREZ,N++,x*3,y);						//draws ladder sprite at it's respective x and y coordinate
 	drawSprite(PREZ,N++,x*6,y);					//draws ladder sprite at it's respective x and y coordinate
 	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
 	y = 64;													//draws the following sprites the y coordinate, y = 48
-	drawSprite(PLATFORM8_L,N++,x*1,y);						//draws ladder sprite at it's respective x and y coordinate
-	drawSprite(PLATFORM8_L,N++,x*2,y);
-	drawSprite(PLATFORM8_L,N++,x*3,y);
-	drawSprite(PLATFORM8_L,N++,x*4,y);
-	drawSprite(PLATFORM8_L,N++,x*5,y);		
-	drawSprite(PLATFORM8_R,N++,x*6,y);					//draws ladder sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM,N++,x*1,y);						//draws ladder sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM,N++,x*2,y);
+	drawSprite(PLATFORM,N++,x*3,y);
+	drawSprite(PLATFORM,N++,x*4,y);
+	drawSprite(PLATFORM,N++,x*5,y);		
+	drawSprite(PLATFORM,N++,x*6,y);					//draws ladder sprite at it's respective x and y coordinate
 	x = 16;													//draws the following sprites starting at the x coordinate, x = 16
 	y = 70;													//draws the following sprites the y coordinate, y = 96
 	drawSprite(PREZ,N++,x*8,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
 	drawSprite(PREZ,N++,x*11,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
 	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
 	y = 110;													//draws the following sprites the y coordinate, y = 96
-	drawSprite(PLATFORM8_L,N++,x*8,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
-	drawSprite(PLATFORM8_L,N++,x*9,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
-	drawSprite(PLATFORM8_R,N++,x*10,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
-	drawSprite(PLATFORM8_R,N++,x*11,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
-	drawSprite(PLATFORM8_R,N++,x*12,y);
+	drawSprite(PLATFORM,N++,x*8,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM,N++,x*9,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM,N++,x*10,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM,N++,x*11,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
+	drawSprite(PLATFORM,N++,x*12,y);
 	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
 	y = 120;													//draws the following sprites the y coordinate, y = 128
 	drawSprite(PREZ,N++,x*2,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
@@ -288,7 +288,7 @@ void gamewin_map1(void)
 	// THIS SECTION DRAWS "SOMEONE CALL THE POLICE" //	
 	y=85;
 	x=70;
-	drawSprite( DR_RIGHT,N++,x-30,y); //DOOR
+	drawSprite( CHIMNEY,N++,x-30,y); //DOOR
 	drawSprite( DR_RIGHT,N++,x,y);	//UNDRESSED SANTA
 	drawSprite( DR_RIGHT,N++,x+100,y);	//SANTA WIFE
 
