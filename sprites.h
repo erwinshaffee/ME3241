@@ -2787,7 +2787,7 @@ u16 sprites[] = {
 6,15,6,0,0,0,0,0,
 15,15,15,0,0,0,0,0,
 
-#define LIVES CHIMNEY+1
+#define LIFE CHIMNEY+1
 
 // Tile 00
 0,0,0,0,1,1,1,1,
