@@ -9,20 +9,14 @@
 int x, y, x2, y2, y3, y_init, dt, lvl = 0, v = 0, N, counter = 0;
 int dir = 4, santa = 0;
 //int timer, activated1 = 0;
+
 int life_counter = 3;
 int map_flag = 0, menu_flag = 0, game_flag = 1, gamewin_flag1 = 2, gamewin_flag2 = 3, gamewin_flag3 = 4, gamelose_flag = 5; 
 int flag = 0, win = 6, lose = 7;
 
 #include "mygbalib.h"
 
-void clearSprites (void)
-{
-// The purpose of this fucntion is to clear all the sprites that is drawn previously, so that new sprites/ new level map can be drawn
-	int j; 						         // This function is only does not rely on any other function that has been defines so a local variable is used instead
-	for(j=0;j<128;j++){		         // This for loop cycle through sprite of N value 0-128 ( cause that's the maximum number of sprites to be drawn  in the screen)
-		drawSprite(10,j,240,160);      // This for loop will make sure that all the available sprites will be drawn outside of the gba screen             
-		}
-} 
+
 
 void Handler(void)
 {
@@ -38,7 +32,7 @@ void Handler(void)
          //check_flags(); //Placeholder here as there needs to be an initial flag check
          x = x + x2;
          y = y + y2;
-		 //jump();
+		 jump();
          x2 = 0; 
          y2 = 0;
     }
@@ -51,14 +45,24 @@ void Handler(void)
 
 void init_pos(void) //To set the initial position of the sprite
 {
-	clearSprites();
+	//clearSprites();
     x = 1;
 	y = 144; //to input starting location
     dir = MR_S_N_R; //Start with Santa facing right
 }
+
+void clearSprites (void)
+{
+// The purpose of this fucntion is to clear all the sprites that is drawn previously, so that new sprites/ new level map can be drawn
+	int j; 						         // This function is only does not rely on any other function that has been defines so a local variable is used instead
+	for(j=0;j<128;j++){		         // This for loop cycle through sprite of N value 0-128 ( cause that's the maximum number of sprites to be drawn  in the screen)
+		drawSprite(10,j,240,160);      // This for loop will make sure that all the available sprites will be drawn outside of the gba screen             
+		}
+} 
+
 void check_flags(void)
 {
-	int dx=16;	 // This local variable is created as it is only called in this function and nowhere else 
+	//int dx=16;	  This local variable is created as it is only called in this function and nowhere else 
 
 	// This checks for the win condition, which is to reach the position x = 192 and y = 10 (chimney sprite)
 	if ( (x == 192) & (y == 10)) {
@@ -309,7 +313,7 @@ void gamewin_map1(void)
 	drawSprite( LETTER_E,N++,x+68,y);				//draws E at it's respective x and y coordinate
 }  
 
-void gamewin_map2(void)
+/*void gamewin_map2(void)
 {
 	// This function draws the map for the game over page 
 	N=7;														// because N is a gobal variable, it has to be re initialise everytime it is called is a new map function
@@ -378,7 +382,7 @@ void gamewin_map2(void)
 	drawSprite( LETTER_N,N++,x+46,y);				//draws E at it's respective x and y coordinate
 	drawSprite( LETTER_T,N++,x+54,y);				//draws E at it's respective x and y coordinate
 	drawSprite( LETTER_A,N++,x+62,y);				//draws E at it's respective x and y coordinate
-}
+}*/
 
 void gamewin_map3(void)
 {
@@ -644,7 +648,7 @@ void gamewin1(void)
 	flag = 0;
 }
 
-void gamewin2(void)
+/*void gamewin2(void)
 {
 	// This function consist of the loop and logic that runs the winning page
 	counter = 0;									// This line will ensure that the counter starts counting once the player entire this stage and not when the player loads the entire .gba file
@@ -654,7 +658,7 @@ void gamewin2(void)
 	}
 	lvl = 0;  								// The lvl variable has to be intialised to 0 so that the next time the player enters the menu page, the player can choose which level to play and not stick to what was chosen priviously
 	flag = 0;
-}
+}*/
 
 void gamewin3(void)
 {
@@ -667,6 +671,7 @@ void gamewin3(void)
 	lvl = 0;  								// The lvl variable has to be intialised to 0 so that the next time the player enters the menu page, the player can choose which level to play and not stick to what was chosen priviously
 	flag = 0;
 }
+
 
 // -----------------------------------------------------------------------------
 // Project Entry Point
@@ -704,6 +709,7 @@ int main(void)
 }*/ 
 while(map_flag<6) //always less than 6, so this loop will always be running
 {
+	
 	if(map_flag==menu_flag) {
 		menu();							// if map_flag == start, the menu loop will be executed
 	}
@@ -713,9 +719,9 @@ while(map_flag<6) //always less than 6, so this loop will always be running
 	if(map_flag==gamewin_flag1) {
 		gamewin1();					// if map_flag == gameover, the game over loop will be executed
 	}
-	if(map_flag==gamewin_flag2) {
+	/*if(map_flag==gamewin_flag2) {
 		gamewin2();					// if map_flag == gameover, the game over loop will be executed
-	}
+	}*/
 	if(map_flag==gamewin_flag3) {
 		gamewin3();					// if map_flag == gameover, the game over loop will be executed
 	}
