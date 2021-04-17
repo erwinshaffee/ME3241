@@ -6,47 +6,67 @@ void buttonA(void) //Z
 {
 	if(v==0)
     {
-        y_init = y; //locks initial y position before the jump
+        yb4_jump = y; //locks initial y position before the jump
         dt = 0; //reinitialize timer to ensure start from zero
-        v = 26; //inputs initial starting velocity
+        v = 37; //inputs initial starting velocity
     }//jump function here;
 }
 void buttonB(void) //X
 {
-	x = x; 
+	lvl = 1;
 }
-
 void buttonSel(void) //Backspace
 {
-	if (map_flag == menu_flag)
-    {
-        lvl = 1;
-    } 
+	y = y;
 }
-void buttonS(void) //Enter
+/*void buttonS(void)
 {
-	if(map_flag == menu_flag /*|| map_flag == gamewin_flag1 || map_flag == gamewin_flag2 || map_flag == gamewin_flag3 || map_flag == gamelose_flag*/)	//try change to single vert									// If the current loop is in the menu loop
-	{
-		lvl = 1; 													// lvl = 2 which will trigger the right conditions to execute level two loop in the main code
-	}
-}
+	x = x;
+}*/
 void buttonR(void)
 {
     if (x > 224) {
         x2 = 0;
-    } else {
-	x2 = 2;
+    } else 
+    {
+	    x2 = 2;
     }
-    dir = MR_S_N_R;
+
+    if (santa == 0)
+    {
+        dir = MR_S_N_R;
+    }
+    if (santa == 1)
+    {
+        dir = MR_S_T_R;
+	} 
+    if (santa == 2)
+    {
+        dir = MR_S_E_R;
+    }
+    
 }
 void buttonL(void)
 {
     if (x < 2) {
         x2 = 0;
-    } else {
-	x2 = -2;
+    } else 
+    {
+	    x2 = -2;
     }
-    dir = MR_S_N_L;
+
+    if (santa == 0)
+    {
+        dir = MR_S_N_L;
+    }
+    if (santa == 1)
+    {
+        dir = MR_S_T_L;
+    } 
+    if (santa == 2)
+    {
+        dir =  MR_S_E_L;
+    }
 }
 void buttonU(void)
 {
@@ -70,7 +90,7 @@ void checkbutton(void)
 {
 	// Gift function to show you how a function that can be called upon button interrupt to detect which button was pressed and run a specific function for each button could look like. You would have to define each buttonA/buttonB/... function yourself.
     u16 buttons = INPUT;
-    
+
     if ((buttons & KEY_A) == KEY_A)
     {
         buttonA();
@@ -79,14 +99,14 @@ void checkbutton(void)
     {
         buttonB();
     }
-    if ((buttons & KEY_SELECT) == KEY_SELECT)
+    /*if ((buttons & KEY_SELECT) == KEY_SELECT)
     {
         buttonSel();
     }
     if ((buttons & KEY_START) == KEY_START)
     {
         buttonS();
-    }
+    }*/
     if ((buttons & KEY_RIGHT) == KEY_RIGHT)
     {
         buttonR();
@@ -115,13 +135,6 @@ void fillPalette(void)
         spritePal[i] = palette[i];
 }
 
-void drawSprite(int numb, int N, int x, int y)
-{
-	// Same as CA2, make specific sprite (based on its name/numb) appear on screen, as slide number N (each sprite needs a different, arbitrary, N >= 0)
-    *(unsigned short *)(0x7000000 + 8*N) = y | 0x2000;
-    *(unsigned short *)(0x7000002 + 8*N) = x | 0x4000;
-    *(unsigned short *)(0x7000004 + 8*N) = numb*8;
-}
 
 void fillSprites(void)
 {
@@ -137,7 +150,13 @@ void fillSprites(void)
 }
 
 
-
+void drawSprite(int numb, int N, int x, int y)
+{
+	// Same as CA2, make specific sprite (based on its name/numb) appear on screen, as slide number N (each sprite needs a different, arbitrary, N >= 0)
+    *(unsigned short *)(0x7000000 + 8*N) = y | 0x2000;
+    *(unsigned short *)(0x7000002 + 8*N) = x | 0x4000;
+    *(unsigned short *)(0x7000004 + 8*N) = numb*8;
+}
 
 
 /*void drawLaser(void) //for fun/future, delete when necessary
@@ -147,7 +166,6 @@ void fillSprites(void)
 	// Note that this code uses largeer sprites with a palette, so the main code needs to be initialized in graphical mode 2, using:
     //		*(unsigned short *) 0x4000000 = 0x40 | 0x2 | 0x1000;
 	// at the beginning of main() in main.c
-
     switch(lPlat) {
         case 16:
         {
@@ -162,4 +180,4 @@ void fillSprites(void)
         default:
             break;
     }
-}*/
+}*/ 
