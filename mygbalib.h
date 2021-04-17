@@ -11,17 +11,17 @@ void buttonA(void) //Z
         v = 26; //inputs initial starting velocity
     }//jump function here;
 }
-void buttonB(void) //X
+/*void buttonB(void) //X
 {
 	lvl = 1; //Press X to load sample level
 }
 void buttonSel(void) //Backspace
 {
 	timer = 0;
-}
-void buttonS(void)
+}*/
+void buttonS(void) //Enter
 {
-	if(map_flag == menu || map_flag == game_win1 || map_flag == game_win2 || map_flag == game_win3 || map_flag == game_lose)										// If the current loop is in the menu loop
+	if(map_flag == menu_flag || map_flag == gamewin_flag1 || map_flag == gamewin_flag2 || map_flag == gamewin_flag3 || map_flag == gamelose_flag)										// If the current loop is in the menu loop
 	{
 		lvl = 1; 													// lvl = 2 which will trigger the right conditions to execute level two loop in the main code
 	}
@@ -33,7 +33,7 @@ void buttonR(void)
     } else {
 	x2 = 2;
     }
-    dir = A_R_NF;
+    dir = MR_S_N_R;
 }
 void buttonL(void)
 {
@@ -42,7 +42,7 @@ void buttonL(void)
     } else {
 	x2 = -2;
     }
-    dir = A_L_NF;
+    dir = MR_S_N_L;
 }
 void buttonU(void)
 {
@@ -71,11 +71,11 @@ void checkbutton(void)
     {
         buttonA();
     }
-    if ((buttons & KEY_B) == KEY_B)
+    /*if ((buttons & KEY_B) == KEY_B)
     {
         buttonB();
     }
-    /*if ((buttons & KEY_SELECT) == KEY_SELECT)
+    if ((buttons & KEY_SELECT) == KEY_SELECT)
     {
         buttonSel();
     }*/
