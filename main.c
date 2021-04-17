@@ -10,7 +10,7 @@ int x, y, x2, y2, y3, y_init, dt, lvl = 0, v = 0, N;
 int dir = 4, santa = 0;
 int timer, activated1 = 0;
 int life_counter = 3;
-int map_flag = 0, menu = 0, game = 1, game_win1 = 2, game_win2 = 3, game_win3 = 4, game_lose = 5; 
+int map_flag = 0, menu_flag = 0, game_flag = 1, gamewin_flag1 = 2, gamewin_flag2 = 3, gamewin_flag3 = 4, gamelose_flag = 5; 
 int flag = 0, win = 6, lose = 7;
 #include "mygbalib.h"
 
@@ -77,17 +77,17 @@ void check_flags(void)
 		flag = win;	// When the condition is met, the flag variable will store the value of win, which is 4
 	}
 	// This flag checks for which button is pressed in the menu page
-	if(map_flag == menu) {
+	if(map_flag == menu_flag) {
 		if(lvl==1) // if button A is pressed the map_flag will change to lvlone, which will load the fucntion that codes for level one
 		{
-			map_flag = game; 	// The map flag will change to lvlone, which will prompt the code load level one map in the main code 
+			map_flag = game_flag; 	// The map flag will change to lvlone, which will prompt the code load level one map in the main code 
 			flag = win;		// When the condition is met, the flag variable will store the value of win, this is need to exit the level loop
 		} 
 	}
-	if(map_flag == game_lose || map_flag == game_win1 || map_flag == game_win2 || map_flag == game_win3) {
+	if(map_flag == gamelose_flag || map_flag == gamewin_flag1 || map_flag == gamewin_flag2 || map_flag == gamewin_flag3) {
 		if(lvl==1) // if button A is pressed the map_flag will change to lvlone, which will load the fucntion that codes for level one
 		{
-			map_flag = menu; 	// The map flag will change to lvlone, which will prompt the code load level one map in the main code 
+			map_flag = menu_flag; 	// The map flag will change to lvlone, which will prompt the code load level one map in the main code 
 			flag = win;		// When the condition is met, the flag variable will store the value of win, this is need to exit the level loop
 		} 
 	}
@@ -597,19 +597,19 @@ void game(void)
 	//This section provides alternative endings based on final dressing outcome of santa
 	if(flag==win && santa == 1)
 	{
-		map_flag = game_win1;	
+		map_flag = gamewin_flag1;	
 	}
 	if(flag==win && santa == 2)
 	{
-		map_flag = game_win2;	
+		map_flag = gamewin_flag2;	
 	}
 	if(flag==win && santa == 3)
 	{
-		map_flag = game_win3;	
+		map_flag = gamewin_flag3;	
 	}
 	if(flag==lose)
 	{
-		map_flag = game_lose;					
+		map_flag = gamelose_flag;					
 	}
 	life_counter=3;						// since pill_counter is also a global variable that will store the last state of the number of pills, it have to be initialise to the starting value to prepare for other levels
 	flag = 0;						// After every level/map the flag have to be re-initialsed to zero so that the appropriate actions can take place at different map/level
@@ -699,23 +699,23 @@ int main(void)
 }*/ 
 while(map_flag<6)
 {
-	if(map_flag==start) {
+	if(map_flag==menu_flag) {
 		menu();							// if map_flag == start, the menu loop will be executed
 	}
-	if(map_flag==game) {
+	if(map_flag==game_flag) {
 		game();					// if map_flag == lvlone, the level one loop will be executed
 	}
-	if(map_flag==game_win1) {
+	if(map_flag==gamewin_flag1) {
 		gamewin1();					// if map_flag == gameover, the game over loop will be executed
 	}
-	if(map_flag==game_win1) {
+	if(map_flag==gamewin_flag2) {
 		gamewin2();					// if map_flag == gameover, the game over loop will be executed
 	}
-	if(map_flag==game_win1) {
+	if(map_flag==gamewin_flag3) {
 		gamewin3();					// if map_flag == gameover, the game over loop will be executed
 	}
-	if(map_flag==game_lose) {
-		gamelose();						// if map_flag == gamewin, the game win loop will be executed
+	if(map_flag==gamelose_flag) {
+		gameover();						// if map_flag == gamewin, the game win loop will be executed
 	}
 
 }
