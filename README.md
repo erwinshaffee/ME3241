@@ -7,4 +7,4 @@ On starting the game, the astronaut will be stationary and cannot be moved
 
 Commands:
 
-'X' to enable the astronaut to move. Arrow keys for updown left right. 'Z' to jump
+'X' to start game. Arrow keys for updown left right. 'Z' to jump
