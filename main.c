@@ -34,10 +34,11 @@ void Handler(void)
 	     counter += 1;
 		 dt += 1;
          checkbutton();
-         jump();
+         
          //check_flags(); //Placeholder here as there needs to be an initial flag check
          x = x + x2;
          y = y + y2;
+		 //jump();
          x2 = 0; 
          y2 = 0;
     }
@@ -47,32 +48,17 @@ void Handler(void)
     REG_IME = 0x01;  // Re-enable interrupt handling
 }
 
-void jump(void) 
-{
-    if (v!=0)
-    {
-        y3 = v*dt - dt*dt;
-        y3 = -y3/10;
-        y = y_init + y3;
-        if (dt > 25) 
-        {
-            dt = 0;
-            v = 0;
-        }
 
-    }
-
-}
 void init_pos(void) //To set the initial position of the sprite
 {
 	clearSprites();
-    x = 0;
+    x = 1;
 	y = 144; //to input starting location
     dir = MR_S_N_R; //Start with Santa facing right
 }
 void check_flags(void)
 {
-	//int dx=16;	 // This local variable is created as it is only called in this function and nowhere else 
+	int dx=16;	 // This local variable is created as it is only called in this function and nowhere else 
 
 	// This checks for the win condition, which is to reach the position x = 192 and y = 10 (chimney sprite)
 	if ( (x == 192) & (y == 10)) {
@@ -572,6 +558,23 @@ void draw_lives(void)
 		drawSprite(LIFE,2,240,160);	// Pill no. 2 is drawn outside of the frame 
 		drawSprite(LIFE,3,240,160);	// and pill no. 3 is also drawn outside of the frame to emulate 1 lives left
 	}
+}
+
+void jump(void) 
+{
+    if (v!=0)
+    {
+        y3 = v*dt - dt*dt;
+        y3 = -y3/10;
+        y = y_init + y3;
+        if (dt > 25) 
+        {
+            dt = 0;
+            v = 0;
+        }
+
+    }
+
 }
 
 void menu(void)
