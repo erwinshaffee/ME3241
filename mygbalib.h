@@ -11,17 +11,21 @@ void buttonA(void) //Z
         v = 26; //inputs initial starting velocity
     }//jump function here;
 }
-/*void buttonB(void) //X
+void buttonB(void) //X
 {
-	lvl = 1; //Press X to load sample level
+	x = x; 
 }
+
 void buttonSel(void) //Backspace
 {
-	timer = 0;
-}*/
+	if (map_flag == menu_flag)
+    {
+        lvl = 1;
+    } 
+}
 void buttonS(void) //Enter
 {
-	if(map_flag == menu_flag || map_flag == gamewin_flag1 || map_flag == gamewin_flag2 || map_flag == gamewin_flag3 || map_flag == gamelose_flag)										// If the current loop is in the menu loop
+	if(map_flag == menu_flag /*|| map_flag == gamewin_flag1 || map_flag == gamewin_flag2 || map_flag == gamewin_flag3 || map_flag == gamelose_flag*/)	//try change to single vert									// If the current loop is in the menu loop
 	{
 		lvl = 1; 													// lvl = 2 which will trigger the right conditions to execute level two loop in the main code
 	}
@@ -71,14 +75,14 @@ void checkbutton(void)
     {
         buttonA();
     }
-    /*if ((buttons & KEY_B) == KEY_B)
+    if ((buttons & KEY_B) == KEY_B)
     {
         buttonB();
     }
     if ((buttons & KEY_SELECT) == KEY_SELECT)
     {
         buttonSel();
-    }*/
+    }
     if ((buttons & KEY_START) == KEY_START)
     {
         buttonS();
@@ -111,6 +115,13 @@ void fillPalette(void)
         spritePal[i] = palette[i];
 }
 
+void drawSprite(int numb, int N, int x, int y)
+{
+	// Same as CA2, make specific sprite (based on its name/numb) appear on screen, as slide number N (each sprite needs a different, arbitrary, N >= 0)
+    *(unsigned short *)(0x7000000 + 8*N) = y | 0x2000;
+    *(unsigned short *)(0x7000002 + 8*N) = x | 0x4000;
+    *(unsigned short *)(0x7000004 + 8*N) = numb*8;
+}
 
 void fillSprites(void)
 {
@@ -126,13 +137,7 @@ void fillSprites(void)
 }
 
 
-void drawSprite(int numb, int N, int x, int y)
-{
-	// Same as CA2, make specific sprite (based on its name/numb) appear on screen, as slide number N (each sprite needs a different, arbitrary, N >= 0)
-    *(unsigned short *)(0x7000000 + 8*N) = y | 0x2000;
-    *(unsigned short *)(0x7000002 + 8*N) = x | 0x4000;
-    *(unsigned short *)(0x7000004 + 8*N) = numb*8;
-}
+
 
 
 /*void drawLaser(void) //for fun/future, delete when necessary
