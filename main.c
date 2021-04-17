@@ -289,8 +289,8 @@ void gamewin_map1(void)
 	y=85;
 	x=70;
 	drawSprite( CHIMNEY,N++,x-30,y); //DOOR
-	drawSprite( DR_RIGHT,N++,x,y);	//UNDRESSED SANTA
-	drawSprite( DR_RIGHT,N++,x+100,y);	//SANTA WIFE
+	//drawSprite( DR_RIGHT,N++,x,y);	//UNDRESSED SANTA
+	drawSprite( MS_S_L,N++,x+100,y);	//SANTA WIFE
 
 	y = 110;													//draws the following sprites at the y coordinate, y = 96
 	x = 120;												   //draws the following sprites the x coordinate,starting from  x = 112
@@ -368,8 +368,8 @@ void gamewin_map2(void)
 	y=85;
 	x=70;
 	drawSprite( CHIMNEY,N++,x-30,y); //DOOR
-	drawSprite( DR_RIGHT,N++,x,y);	//UNDRESSED SANTA
-	drawSprite( DR_RIGHT,N++,x+100,y);	//SANTA WIFE
+	//drawSprite( DR_RIGHT,N++,x,y);	//SANTA LOOKING DIFFERENT
+	drawSprite( KID_L,N++,x+100,y);	//SANTA WIFE
 
 	y = 110;													//draws the following sprites at the y coordinate, y = 96
 	x = 146;												   //draws the following sprites the x coordinate,starting from  x = 112
@@ -438,10 +438,10 @@ void gamewin_map3(void)
 	// THIS SECTION DRAWS "HO HO HO MERRY XMAS" //	
 	y=85;
 	x=70;
-	drawSprite( DR_RIGHT,N++,x-30,y); //DOOR
-	drawSprite( DR_RIGHT,N++,x,y);	//UNDRESSED SANTA
-	drawSprite( DR_LEFT,N++,x+20,y);
-	drawSprite( DR_RIGHT,N++,x+100,y);	//SANTA WIFE
+	drawSprite( CHIMNEY,N++,x-30,y); //DOOR
+	drawSprite( MR_S_E_R,N++,x,y);	//SANTA
+	drawSprite( PREZ,N++,x+20,y);
+	drawSprite( MS_S_L,N++,x+100,y);	//SANTA WIFE
 
 	y = 110;													//draws the following sprites at the y coordinate, y = 96
 	x = 50;												   //draws the following sprites the x coordinate,starting from  x = 112
@@ -509,9 +509,9 @@ void gamelose_map(void)
 	// THIS SECTION DRAWS "SANTA CAN DO BETTER TRY AGAIN"//	
 	y=85;
 	x=100;
-	drawSprite( DR_RIGHT,N++,x-2,y);	//UNDRESSED SANTA
-	drawSprite( DR_LEFT,N++,x+20,y);
-	drawSprite( DR_RIGHT,N++,x+40,y);	//SANTA WIFE
+	drawSprite( MR_S_E_R,N++,x-2,y);	//UNDRESSED SANTA
+	drawSprite( PREZ,N++,x+20,y);
+	drawSprite( MS_S_L,N++,x+40,y);	//SANTA WIFE
 
 	y = 110;													//draws the following sprites at the y coordinate, y = 96
 	x = 44;												   //draws the following sprites the x coordinate,starting from  x = 112
