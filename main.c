@@ -65,7 +65,7 @@ void check_flags(void)
 	//int dx=16;	  This local variable is created as it is only called in this function and nowhere else 
 
 	// This checks for the win condition, which is to reach the position x = 192 and y = 10 (chimney sprite)
-	if ( (x == 192) & (y == 10)) {
+	if ( (x == 192) & (y == 20)) {
 		flag = win;	// When the condition is met, the flag variable will store the value of win, which is 4
 	}
 	// This flag checks for which button is pressed in the menu page
@@ -191,7 +191,7 @@ void game_map(void)
 	drawSprite(CHIMNEY,N,2,y);              	 	// some random line to get the code working
 	// THIS SECTION DRAWS THE CHIMNEY IN FINAL POSITION //
 	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
-	y = 10;													//draws the following sprites the y coordinate, y = 16
+	y = 20;													//draws the following sprites the y coordinate, y = 16
 	drawSprite(CHIMNEY,N++,x*12,y);					//draws vaccine sprite at it's respective x and y coordinate
 	// THIS SECTION DRAWS THE PLATFORMS AND GIFTS //
 	x = 16;													//x is set as 16 so that I can draw the sprites by the grid positions instead of actualy pixel number
