@@ -6,12 +6,13 @@
 //#include "time.h"
 
 
-int x, y, x2, y2, y3, y_init, dt, lvl = 0, v = 0, N;
+int x, y, x2, y2, y3, y_init, dt, lvl = 0, v = 0, N, counter = 0;
 int dir = 4, santa = 0;
-int timer, activated1 = 0;
+//int timer, activated1 = 0;
 int life_counter = 3;
 int map_flag = 0, menu_flag = 0, game_flag = 1, gamewin_flag1 = 2, gamewin_flag2 = 3, gamewin_flag3 = 4, gamelose_flag = 5; 
 int flag = 0, win = 6, lose = 7;
+
 #include "mygbalib.h"
 
 void clearSprites (void)
@@ -30,10 +31,11 @@ void Handler(void)
     if ((REG_IF & INT_TIMER0) == INT_TIMER0) // TODO: replace XXX with the specific interrupt you are handling
     {
         // TODO: Handle timer interrupt here
-	     dt += 1;
+	     counter += 1;
+		 dt += 1;
          checkbutton();
          jump();
-         check_flags(); //Placeholder here as there needs to be an initial flag check
+         //check_flags(); //Placeholder here as there needs to be an initial flag check
          x = x + x2;
          y = y + y2;
          x2 = 0; 
@@ -66,11 +68,11 @@ void init_pos(void) //To set the initial position of the sprite
 	clearSprites();
     x = 0;
 	y = 144; //to input starting location
-    dir = A_R_NF; //Start with Santa facing right
+    dir = MR_S_N_R; //Start with Santa facing right
 }
 void check_flags(void)
 {
-	int dx=16;	 // This local variable is created as it is only called in this function and nowhere else 
+	//int dx=16;	 // This local variable is created as it is only called in this function and nowhere else 
 
 	// This checks for the win condition, which is to reach the position x = 192 and y = 10 (chimney sprite)
 	if ( (x == 192) & (y == 10)) {
@@ -91,7 +93,7 @@ void check_flags(void)
 			flag = win;		// When the condition is met, the flag variable will store the value of win, this is need to exit the level loop
 		} 
 	}
-	// This flag checks if the enemy comes into contact with Santa 
+	/*// This flag checks if the enemy comes into contact with Santa 
 	if ((enemy1_y == y )|(enemy2_y ==y)) {					// This condition is use to check the y co-ordinate of the two viruses and the doctor																	// If the viruses and the doctor is on the same level/y-coordinate, the following if statements will check if the doctor and virus will come into contact
 		if( x > enemy_x) {											// This if statement tracks case 1 of the interaction between the virus and the doctor: which is when the doctor is on the right of the virus									
 			dx = x - enemy_x;										// in this case the difference between them is then the x-cordinate of the doctor minus the x coordinate of the virus
@@ -101,12 +103,12 @@ void check_flags(void)
 		}  
 		if( dx < 16) { 												// if the difference in x coordinate between the doctor and the virus is less than 16, it means the two sprite have come into contact
 			life_counter--;				// this would mean that the doctor have died and hence lost one life/pill, pill_counter tracks the number of live the doctor has left 
-			pos_init();						// because the doctor have lost a live, he would have to start from the beginng in the initial position stated in the pos_init function
+			init_pos();						// because the doctor have lost a live, he would have to start from the beginng in the initial position stated in the pos_init function
 			if(life_counter == 0) {		// when the pill_counter is down to 0 the charcater has no more lives left and it is game over for the player 
 				flag = lose;				// hence the the flag variable will store the value of lose, which is just the integer 6 
 			}
 		}
-	}
+	}*/
 }
 
 /*void move(void){ //initial iteration to test movement
@@ -237,7 +239,7 @@ void game_map(void)
 	drawSprite(PREZ,N++,x*2,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
 	drawSprite(PREZ,N++,x*6,y);					//draws PLATFORM_M sprite at it's respective x and y coordinate
 
-	pos_init();													// reset the initial position of the doctor after the map is drawn 
+	init_pos();													// reset the initial position of the doctor after the map is drawn 
 }
 
 void gamewin_map1(void)
@@ -455,7 +457,7 @@ void gamewin_map3(void)
 	
 	y = 122;													//draws the following sprites at the y coordinate, y = 96
 	x = 50;
-	drawSprite( LETTER_MW,N++,x,y);				//draws E at it's respective x and y coordinate
+	drawSprite( LETTER_M,N++,x,y);				//draws E at it's respective x and y coordinate
 	drawSprite( LETTER_E,N++,x+8,y);				//draws E at it's respective x and y coordinate
 	drawSprite( LETTER_R,N++,x+16,y);				//draws E at it's respective x and y coordinate
 	drawSprite( LETTER_R,N++,x+24,y);				//draws E at it's respective x and y coordinate
@@ -668,7 +670,7 @@ void gamewin3(void)
 // -----------------------------------------------------------------------------
 int main(void)
 {
-	int activated = 0;
+	//int activated = 0;
     // Set Mode 2
     *(unsigned short *) 0x4000000 = 0x40 | 0x2 | 0x1000;
 	
@@ -685,7 +687,7 @@ int main(void)
     REG_TM0D =	63350;		// TODO: complete this line to set timer initial value
     REG_TM0CNT |=	TIMER_FREQUENCY_256 | TIMER_INTERRUPTS | TIMER_ENABLE;	// TODO: complete this line to set timer frequency and enable timer
     
-    activated = 1;
+    //activated = 1;
     /*while (activated == 1) { //as long as activated, look for the timer values and do accordingly
 
     switch (timer)
@@ -697,7 +699,7 @@ int main(void)
         move();
     } 
 }*/ 
-while(map_flag<6)
+while(map_flag<6) //always less than 6, so this loop will always be running
 {
 	if(map_flag==menu_flag) {
 		menu();							// if map_flag == start, the menu loop will be executed
